@@ -12,10 +12,81 @@
   <title>Weather App</title>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"/>
 </head>
 <body>
   <nav class="navbar navbar-light bg-dark justify-content-center">
-      <span class="navbar-brand mb-0 h1" style="color: white; font-size: 3vw;">Weather Dashboard</span>
+    <span class="navbar-brand mb-0 h1" style="color: white; font-size: 3vw;"> Weather Dashboard</span>
   </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-4">
+      <h4>Search for a city:</h4>
+        <form class="form-inline">
+            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0 fas fa-search" type="submit"></button>
+        </form>
+      </div>
+      <div class="col-8">
+        <div id="today">
+          <h2>City</h2>
+          <div id="todayStats">Temperature</div>
+          <div id="todayStats">Humidity</div>
+          <div id="todayStats">Windspeed</div>
+          <div id="todayStats">UV Index</div>
+        </div>
+        <div id="forcasttext">
+          <h2>5-Day Forcast:</h2>
+        </div>
+        <div class="container">
+          <div class="card col-auto" style="width: 8rem;">
+            <div class="card-body">
+              <div id="onedaylater">
+              </div> 
+            </div>
+          </div>
+        </div>
+          <div class="card col-auto " style="width: 8rem;">
+            <div class="card-body">
+              <div id="twodaylater">
+              </div> 
+            </div>
+          </div>
+          <div class="card col-auto " style="width: 8rem;">
+            <div class="card-body">
+              <div id="threedaylater">
+              </div> 
+            </div>
+        </div>
+          <div class="card col-auto " style="width: 8rem;">
+            <div class="card-body">
+              <div id="fourdaylater">
+              </div> 
+            </div>
+          </div>
+          <div class="card col-auto" style="width: 8rem;">
+            <div class="card-body">
+              <div id="fivedaylater">
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+  var today = moment().format('L');
+  var oneDay = moment().add(1, 'day').format('L');
+  var twoDay = moment().add(2, 'day').format('L');
+  var threeDay = moment().add(3, 'day').format('L');
+  var fourDay = moment().add(4, 'day').format('L');
+  var fiveDay = moment().add(5, 'day').format('L');
+  $("#onedaylater").text(oneDay)
+  $("#twodaylater").text(twoDay)
+  $("#threedaylater").text(threeDay)
+  $("#fourdaylater").text(fourDay)
+  $("#fivedaylater").text(fiveDay)
+  </script>
 </body>
 </html>

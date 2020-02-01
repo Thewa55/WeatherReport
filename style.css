@@ -1,0 +1,21 @@
+.fas{
+    height: 40px !important;
+}
+
+#today{
+    margin-top: 20px;
+    border: 2px solid;
+    border-color: gray;
+    padding: 20px;
+}
+#todayStats{
+    margin-top: 10px;
+}
+#forcasttext{
+    margin-top: 15px;
+}
+.card{
+    float: left;
+    padding: 0px !important;
+    background-color: rgb(52, 147, 236);
+}
