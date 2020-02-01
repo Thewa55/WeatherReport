@@ -47,7 +47,7 @@
           <div class="card col-auto" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="onedaylater"></h5>
-              <div id="onedayicon"></div>              
+              <div class="icon" id="onedayicon"></div>              
               <p class="card-text onedaytemp"></p>
               <p class="card-text onedayhumid"></p>
             </div>
@@ -56,7 +56,7 @@
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="twodaylater"></h5> 
-              <div id="twodayicon"></div>              
+              <div class="icon" id="twodayicon"></div>              
               <p class="card-text twodaytemp"></p>
               <p class="card-text twodayhumid"></p>              
             </div>
@@ -64,7 +64,7 @@
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="threedaylater"></h5>
-              <div id="threedayicon"></div>              
+              <div class="icon" id="threedayicon"></div>              
               <p class="card-text threedaytemp"></p>
               <p class="card-text threedayhumid"></p> 
             </div>
@@ -72,7 +72,7 @@
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="fourdaylater"></h5>
-              <div id="fourdayicon"></div>              
+              <div class="icon" id="fourdayicon"></div>              
               <p class="card-text fourdaytemp"></p>
               <p class="card-text fourdayhumid"></p> 
             </div>
@@ -80,7 +80,7 @@
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="fivedaylater"></h5>
-              <div id="fivedayicon"></div>              
+              <div class="icon" id="fivedayicon"></div>              
               <p class="card-text fivedaytemp"></p>
               <p class="card-text fivedayhumid"></p>
             </div>
@@ -91,17 +91,21 @@
   </div>
   
   <script>
-
+  //time formats for all the boxes
   var today = moment().format('L');
   var oneDay = moment().add(1, 'day').format('L');
   var twoDay = moment().add(2, 'day').format('L');
   var threeDay = moment().add(3, 'day').format('L');
   var fourDay = moment().add(4, 'day').format('L');
   var fiveDay = moment().add(5, 'day').format('L');
+  
+  //variables set
   var searchedCity = []
   var citySearch = ""
   var lon = ""
   var lat = ""
+
+  //applying the time to elements
   $("#onedaylater").text(oneDay)
   $("#twodaylater").text(twoDay)
   $("#threedaylater").text(threeDay)
@@ -110,6 +114,7 @@
 
   
   function weatherSearch(event){
+    $(".icon").empty();
     event.preventDefault();
     citySearch = $(".form-control").val();
     searchedCity.push(citySearch)
@@ -120,13 +125,13 @@
       url: queryURL,
       method: "GET"
     }).then(function(response){
-      $("#cityName").text(response.name)
+      $("#cityName").text(response.name+" "+today)
       weatherURL = "http://openweathermap.org/img/w/"+response.weather[0].icon+".png"
       var image = $("<img>").attr("src", weatherURL)
       $("#cityName").append(image)
       $("#todayTemp").text("Temperature: " + ((parseInt(response.main.temp)-273.15)*1.8+32).toFixed(0) + "°F/ " + (parseInt(response.main.temp)-273.15).toFixed(1) + "°C")
       $("#todayHumid").text("Humidity: " + (response.main.humidity)+"%")
-      $("#todayWind").text("Windspeed: " + (response.wind.speed))
+      $("#todayWind").text("Windspeed: " + (parseInt(response.wind.speed)*2.27).toFixed(2)+" MPH")
       lon = response.coord.lon;
       lat = response.coord.lat;
       getUV(lon,lat);
@@ -176,9 +181,39 @@
       $("#onedayicon").append(image)
       $(".onedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
       $(".onedayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
-      $("#ondayicon").attr("src", weatherURL)
-      //2 day data
-
+      $("#onedayicon").attr("src", weatherURL)
+      //2nd day data
+      var oneDayQuery = response3.list[15]
+      var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+      image = $("<img>").attr("src", imageURL)
+      $("#twodayicon").append(image)
+      $(".twodaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
+      $(".twodayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
+      $("#twodayicon").attr("src", weatherURL)
+      //3rd day data
+      var oneDayQuery = response3.list[23]
+      var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+      image = $("<img>").attr("src", imageURL)
+      $("#threedayicon").append(image)
+      $(".threedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
+      $(".threedayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
+      $("#threedayicon").attr("src", weatherURL)
+      //4th day data
+      var oneDayQuery = response3.list[31]
+      var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+      image = $("<img>").attr("src", imageURL)
+      $("#fourdayicon").append(image)
+      $(".fourdaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
+      $(".fourdayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
+      $("#fourdayicon").attr("src", weatherURL)
+      //4th day data
+      var oneDayQuery = response3.list[39]
+      var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+      image = $("<img>").attr("src", imageURL)
+      $("#fivedayicon").append(image)
+      $(".fivedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
+      $(".fivedayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
+      $("#fivedayicon").attr("src", weatherURL)
     })
   }
 
