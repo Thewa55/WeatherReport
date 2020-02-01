@@ -16,6 +16,11 @@
 }
 .card{
     float: left;
+    margin-left: .5em;
     padding: 0px !important;
     background-color: rgb(52, 147, 236);
+}
+.card-body{
+    padding-left: 5px !important;
+    padding-right: 5px !important;
 }

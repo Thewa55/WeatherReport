@@ -20,14 +20,16 @@
   </nav>
   <div class="container">
     <div class="row">
-      <div class="col-4">
+      <div class="col-3">
       <h4>Search for a city:</h4>
         <form class="form-inline">
-            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control" type="search" id="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0 fas fa-search" type="submit"></button>
         </form>
+        <div id="searches">
+        </div>
       </div>
-      <div class="col-8">
+      <div class="col-9 justify-content-center">
         <div id="today">
           <h2>City</h2>
           <div id="todayStats">Temperature</div>
@@ -38,36 +40,31 @@
         <div id="forcasttext">
           <h2>5-Day Forcast:</h2>
         </div>
-        <div class="container">
-          <div class="card col-auto" style="width: 8rem;">
+        <div class="container justify-content-center">
+          <div class="card col-auto" style="width: 8.5rem;">
             <div class="card-body">
-              <div id="onedaylater">
-              </div> 
+              <h5 id="onedaylater"></h5> 
             </div>
           </div>
         </div>
-          <div class="card col-auto " style="width: 8rem;">
+          <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
-              <div id="twodaylater">
-              </div> 
+              <h5 id="twodaylater"></h5> 
             </div>
           </div>
-          <div class="card col-auto " style="width: 8rem;">
+          <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
-              <div id="threedaylater">
-              </div> 
+              <h5 id="threedaylater"></h5> 
             </div>
         </div>
-          <div class="card col-auto " style="width: 8rem;">
+          <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
-              <div id="fourdaylater">
-              </div> 
+              <h5 id="fourdaylater"></h5> 
             </div>
           </div>
-          <div class="card col-auto" style="width: 8rem;">
+          <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
-              <div id="fivedaylater">
-              </div> 
+              <h5 id="fivedaylater"></h5> 
             </div>
           </div>
         </div>
@@ -76,17 +73,41 @@
   </div>
   
   <script>
+
   var today = moment().format('L');
   var oneDay = moment().add(1, 'day').format('L');
   var twoDay = moment().add(2, 'day').format('L');
   var threeDay = moment().add(3, 'day').format('L');
   var fourDay = moment().add(4, 'day').format('L');
   var fiveDay = moment().add(5, 'day').format('L');
+  var searchedCity = []
+  var citySearch = ""
   $("#onedaylater").text(oneDay)
   $("#twodaylater").text(twoDay)
   $("#threedaylater").text(threeDay)
   $("#fourdaylater").text(fourDay)
   $("#fivedaylater").text(fiveDay)
+
+  
+  function weatherSearch(event){
+    event.preventDefault();
+    citySearch = $(".form-control").val();
+    searchedCity.push(citySearch)
+    console.log(searchedCity)
+  }
+    // $(".formcontrol").val()
+    // var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+ $(".formcontrol").val()  +"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
+    // console.log(queryURL)
+    // $.ajax({
+    //   url: queryURL,
+    //   method: "GET"
+    // }).then(function(response){
+    //     console.log(response)
+    // })
+  
+
+  $(".btn").on("click",weatherSearch)
+  
   </script>
 </body>
 </html>
