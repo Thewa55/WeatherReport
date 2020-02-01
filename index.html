@@ -115,6 +115,8 @@
   $("#fourdaylater").text(fourDay);
   $("#fivedaylater").text(fiveDay);
   
+
+  //initial function where the local storage gets pulled and buttons are made
   function initialize(){
       storedCity = JSON.parse(localStorage.getItem("city"))
       console.log(storedCity)
@@ -124,6 +126,7 @@
       }
   }
 
+  //this function creates buttons based off user clicks or local storage
   function cityButtons(){
     $("#searches").empty()
     for(i = 0; i < searchedCity.length; i++){
@@ -146,6 +149,10 @@
     console.log(searchedCity)
     cityButtons()
     localStorage.setItem("city",JSON.stringify(searchedCity))
+    getData(citySearch)
+  }
+
+  function getData(citySearch){
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+citySearch+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
     $.ajax({
       url: queryURL,
@@ -201,21 +208,21 @@
       url: fivedayQuery,
       method: "GET",
     }).then(function(response3){
+      console.log(response3)
       var fivetemp = document.querySelectorAll("#fivetemp")
       var fiveicon = document.querySelectorAll(".icon")
       var fivehumid = document.querySelectorAll("#fivehumid")
       var j = 7
       for(i = 0; i < 5; i++){
         var oneDayQuery = response3.list[j]
-        console.log(oneDayQuery)
-        var img = document.createElement("img")
-        img.src = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
-        fiveicon[i].appendChild(img)
-        var innertemp = "Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F"
-        fivetemp[i].innerHTML = innertemp
-        var innerhumid = "Humidity: "+oneDayQuery.main.humidity+"%"
-        fivehumid[i].innerHTML= innerhumid
-        j = j + 8
+        var innertemp = "Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F";
+        fivetemp[i].innerHTML = innertemp;
+        var innerhumid = "Humidity: "+oneDayQuery.main.humidity+"%";
+        fivehumid[i].innerHTML= innerhumid;
+        var img = document.createElement("img");
+        img.src = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png";
+        fiveicon[i].appendChild(img);
+        j = j + 8;
       }
       //below is jquery where I went and typed out each line for each day, condensed it into 13 lines of code above
       //tomorrow's data
@@ -264,7 +271,12 @@
   initialize()
 
   $(".btn").on("click",weatherSearch)
-  
+  $(document).on("click", ".city",function(){
+      citySearch = $(this).attr("data-city")
+      $(".icon").empty();
+      console.log(citySearch)
+      getData(citySearch)
+  });
   </script>
 </body>
 </html>
