@@ -27,6 +27,8 @@
             <button class="btn btn-outline-success my-2 my-sm-0 fas fa-search" type="submit"></button>
         </form>
         <div id="searches">
+            <button class="btn btn-secondary" id = "new">CITY HERE</button>
+            <button class="btn btn-secondary" id = "new">NOTHERONE</button>
         </div>
       </div>
       <div class="col-9 justify-content-center">
@@ -44,28 +46,43 @@
         <div class="container justify-content-center">
           <div class="card col-auto" style="width: 8.5rem;">
             <div class="card-body">
-              <h5 id="onedaylater"></h5> 
+              <h5 id="onedaylater"></h5>
+              <div id="onedayicon"></div>              
+              <p class="card-text onedaytemp"></p>
+              <p class="card-text onedayhumid"></p>
             </div>
           </div>
         </div>
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="twodaylater"></h5> 
+              <div id="twodayicon"></div>              
+              <p class="card-text twodaytemp"></p>
+              <p class="card-text twodayhumid"></p>              
             </div>
           </div>
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
-              <h5 id="threedaylater"></h5> 
+              <h5 id="threedaylater"></h5>
+              <div id="threedayicon"></div>              
+              <p class="card-text threedaytemp"></p>
+              <p class="card-text threedayhumid"></p> 
             </div>
         </div>
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
-              <h5 id="fourdaylater"></h5> 
+              <h5 id="fourdaylater"></h5>
+              <div id="fourdayicon"></div>              
+              <p class="card-text fourdaytemp"></p>
+              <p class="card-text fourdayhumid"></p> 
             </div>
           </div>
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
-              <h5 id="fivedaylater"></h5> 
+              <h5 id="fivedaylater"></h5>
+              <div id="fivedayicon"></div>              
+              <p class="card-text fivedaytemp"></p>
+              <p class="card-text fivedayhumid"></p>
             </div>
           </div>
         </div>
@@ -108,7 +125,7 @@
       var image = $("<img>").attr("src", weatherURL)
       $("#cityName").append(image)
       $("#todayTemp").text("Temperature: " + ((parseInt(response.main.temp)-273.15)*1.8+32).toFixed(0) + "°F/ " + (parseInt(response.main.temp)-273.15).toFixed(1) + "°C")
-      $("#todayHumid").text("Humidity: " + (response.main.humidity))
+      $("#todayHumid").text("Humidity: " + (response.main.humidity)+"%")
       $("#todayWind").text("Windspeed: " + (response.wind.speed))
       lon = response.coord.lon;
       lat = response.coord.lat;
@@ -144,28 +161,27 @@
     })
   }
 
-//   function five(lon,lat){
-//     let fivedayQuery = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
-//     console.log(fivedayQuery)
-//     $.ajax({
-//       url: fivedayQuery,
-//       method: "GET",
-//     }).then(function(response3){
-//       console.log(response3)
-//       var futureTime = response3.list[39].dt
-//       console.log(futureTime)
-//       var sec = new Date(futureTime*1000)
-//       console.log("Array 39 time is" + sec)
-//       var timezone = response3.city.timezone
-//       console.log(timezone)
-//       toTimeZone(sec, timezone)
-//     })
-//   }
+  function five(lon,lat){
+    let fivedayQuery = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
+    console.log(fivedayQuery)
+    $.ajax({
+      url: fivedayQuery,
+      method: "GET",
+    }).then(function(response3){
+      console.log(response3)
+      //tomorrow's data
+      var oneDayQuery = response3.list[7]
+      var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+      image = $("<img>").attr("src", imageURL)
+      $("#onedayicon").append(image)
+      $(".onedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
+      $(".onedayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
+      $("#ondayicon").attr("src", weatherURL)
+      //2 day data
 
-  function toTimeZone(time, zone) {
-    var format = 'YYYY/MM/DD HH:mm:ss ZZ';
-    return moment(time, format).tz(zone).format(format);
+    })
   }
+
 
   $(".btn").on("click",weatherSearch)
   

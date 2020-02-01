@@ -24,3 +24,11 @@
     padding-left: 5px !important;
     padding-right: 5px !important;
 }
+#searches{
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+#new{
+    margin-top: 2px;
+    width: 100%;
+}
