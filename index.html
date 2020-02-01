@@ -26,9 +26,10 @@
             <input class="form-control" type="search" id="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0 fas fa-search" type="submit"></button>
         </form>
+        <div id="homeBtn">
+            <button class="btn btn-secondary new">My location</button> 
+        </div>
         <div id="searches">
-            <button class="btn btn-secondary" id = "new">CITY HERE</button>
-            <button class="btn btn-secondary" id = "new">NOTHERONE</button>
         </div>
       </div>
       <div class="col-9 justify-content-center">
@@ -100,26 +101,50 @@
   var fiveDay = moment().add(5, 'day').format('L');
   
   //variables set
-  var searchedCity = []
-  var citySearch = ""
-  var lon = ""
-  var lat = ""
+  var storedCity = [];
+  var searchedCity = [];
+  var citySearch = "";
+  var lon = "";
+  var lat = "";
 
   //applying the time to elements
-  $("#onedaylater").text(oneDay)
-  $("#twodaylater").text(twoDay)
-  $("#threedaylater").text(threeDay)
-  $("#fourdaylater").text(fourDay)
-  $("#fivedaylater").text(fiveDay)
-
+  $("#onedaylater").text(oneDay);
+  $("#twodaylater").text(twoDay);
+  $("#threedaylater").text(threeDay);
+  $("#fourdaylater").text(fourDay);
+  $("#fivedaylater").text(fiveDay);
   
+  function initialize(){
+      storedCity = JSON.parse(localStorage.getItem("city"))
+      console.log(storedCity)
+      if(storedCity !== null){
+        searchedCity = storedCity;
+        cityButtons();
+      }
+  }
+
+  function cityButtons(){
+    $("#searches").empty()
+    for(i = 0; i < searchedCity.length; i++){
+      var cityBtn = $("<button>").text(searchedCity[i])
+      cityBtn.attr("class", "btn btn-secondary new city")
+      cityBtn.attr("data-city", searchedCity[i])
+      $("#searches").append(cityBtn)
+    }
+  }
+
+  //this function runs when you hit the search button
   function weatherSearch(event){
     $(".icon").empty();
     event.preventDefault();
     citySearch = $(".form-control").val();
+    if(citySearch == ""){
+        return
+    }
     searchedCity.push(citySearch)
     console.log(searchedCity)
-    localStorage.setItem("Cities",searchedCity)
+    cityButtons()
+    localStorage.setItem("city",JSON.stringify(searchedCity))
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+citySearch+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
     $.ajax({
       url: queryURL,
@@ -139,7 +164,7 @@
     })
   }
 
-
+  //grabs the longitude and latitude from weathersearch function and gets the UV readings
   function getUV(lon,lat){
     let UVquery = "http://api.openweathermap.org/data/2.5/uvi?appid=bd4e60e82b50ca8a0a79d3108bb6b609&lat=" + lat + "&lon=" + lon
     $.ajax({
@@ -148,6 +173,7 @@
     }).then(function(response2){
       UVrating = response2.value
       $("#UVrating").text(UVrating)
+      //if statements check the UV ratings to see what color to assign it
       if(UVrating < 3){
         $("#UVrating").css("background-color", "green")
       }
@@ -166,6 +192,7 @@
     })
   }
 
+  //grabs the longitude and latitude from weathersearch function and gets the 5 day forcast
   function five(lon,lat){
     let fivedayQuery = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
     console.log(fivedayQuery)
@@ -206,7 +233,7 @@
       $(".fourdaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
       $(".fourdayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
       $("#fourdayicon").attr("src", weatherURL)
-      //4th day data
+      //5th day data
       var oneDayQuery = response3.list[39]
       var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
       image = $("<img>").attr("src", imageURL)
@@ -217,6 +244,7 @@
     })
   }
 
+  initialize()
 
   $(".btn").on("click",weatherSearch)
   

@@ -26,9 +26,11 @@
 }
 #searches{
     flex-wrap: wrap;
-    margin-top: 10px;
 }
-#new{
+.new{
     margin-top: 2px;
     width: 100%;
+}
+#homeBtn{
+    margin-top: 10px;
 }
