@@ -27,7 +27,7 @@
             <button class="btn btn-outline-success my-2 my-sm-0 fas fa-search" type="submit"></button>
         </form>
         <div id="homeBtn">
-            <button class="btn btn-secondary new">My location</button> 
+            <!-- <button class="btn btn-secondary new">My location</button>  -->
         </div>
         <div id="searches">
         </div>
@@ -151,7 +151,7 @@
       method: "GET"
     }).then(function(response){
       $("#cityName").text(response.name+" "+today)
-      weatherURL = "http://openweathermap.org/img/w/"+response.weather[0].icon+".png"
+      weatherURL = "https://openweathermap.org/img/w/"+response.weather[0].icon+".png"
       var image = $("<img>").attr("src", weatherURL)
       $("#cityName").append(image)
       $("#todayTemp").text("Temperature: " + ((parseInt(response.main.temp)-273.15)*1.8+32).toFixed(0) + "°F/ " + (parseInt(response.main.temp)-273.15).toFixed(1) + "°C")
@@ -166,7 +166,7 @@
 
   //grabs the longitude and latitude from weathersearch function and gets the UV readings
   function getUV(lon,lat){
-    let UVquery = "http://api.openweathermap.org/data/2.5/uvi?appid=bd4e60e82b50ca8a0a79d3108bb6b609&lat=" + lat + "&lon=" + lon
+    let UVquery = "https://api.openweathermap.org/data/2.5/uvi?appid=bd4e60e82b50ca8a0a79d3108bb6b609&lat=" + lat + "&lon=" + lon
     $.ajax({
       url: UVquery,
       method: "GET"
@@ -194,7 +194,7 @@
 
   //grabs the longitude and latitude from weathersearch function and gets the 5 day forcast
   function five(lon,lat){
-    let fivedayQuery = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
+    let fivedayQuery = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
     console.log(fivedayQuery)
     $.ajax({
       url: fivedayQuery,
@@ -203,7 +203,7 @@
       console.log(response3)
       //tomorrow's data
       var oneDayQuery = response3.list[7]
-      var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+      var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
       image = $("<img>").attr("src", imageURL)
       $("#onedayicon").append(image)
       $(".onedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
@@ -219,7 +219,7 @@
       $("#twodayicon").attr("src", weatherURL)
       //3rd day data
       var oneDayQuery = response3.list[23]
-      var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+      var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
       image = $("<img>").attr("src", imageURL)
       $("#threedayicon").append(image)
       $(".threedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
@@ -227,7 +227,7 @@
       $("#threedayicon").attr("src", weatherURL)
       //4th day data
       var oneDayQuery = response3.list[31]
-      var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+      var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
       image = $("<img>").attr("src", imageURL)
       $("#fourdayicon").append(image)
       $(".fourdaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
@@ -235,7 +235,7 @@
       $("#fourdayicon").attr("src", weatherURL)
       //5th day data
       var oneDayQuery = response3.list[39]
-      var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+      var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
       image = $("<img>").attr("src", imageURL)
       $("#fivedayicon").append(image)
       $(".fivedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
