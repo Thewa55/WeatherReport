@@ -50,8 +50,8 @@
             <div class="card-body">
               <h5 id="onedaylater"></h5>
               <div class="icon" id="onedayicon"></div>              
-              <p class="card-text onedaytemp"></p>
-              <p class="card-text onedayhumid"></p>
+              <p class="card-text onedaytemp" id="fivetemp"></p>
+              <p class="card-text onedayhumid" id="fivehumid"></p>
             </div>
           </div>
         </div>
@@ -59,32 +59,32 @@
             <div class="card-body">
               <h5 id="twodaylater"></h5> 
               <div class="icon" id="twodayicon"></div>              
-              <p class="card-text twodaytemp"></p>
-              <p class="card-text twodayhumid"></p>              
+              <p class="card-text twodaytemp" id="fivetemp"></p>
+              <p class="card-text twodayhumid" id="fivehumid"></p>              
             </div>
           </div>
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="threedaylater"></h5>
               <div class="icon" id="threedayicon"></div>              
-              <p class="card-text threedaytemp"></p>
-              <p class="card-text threedayhumid"></p> 
+              <p class="card-text threedaytemp" id="fivetemp"></p>
+              <p class="card-text threedayhumid" id="fivehumid"></p> 
             </div>
         </div>
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="fourdaylater"></h5>
               <div class="icon" id="fourdayicon"></div>              
-              <p class="card-text fourdaytemp"></p>
-              <p class="card-text fourdayhumid"></p> 
+              <p class="card-text fourdaytemp" id="fivetemp"></p>
+              <p class="card-text fourdayhumid" id="fivehumid"></p> 
             </div>
           </div>
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="fivedaylater"></h5>
               <div class="icon" id="fivedayicon"></div>              
-              <p class="card-text fivedaytemp"></p>
-              <p class="card-text fivedayhumid"></p>
+              <p class="card-text fivedaytemp" id="fivetemp"></p>
+              <p class="card-text fivedayhumid" id="fivehumid"></p>
             </div>
           </div>
         </div>
@@ -201,47 +201,63 @@
       url: fivedayQuery,
       method: "GET",
     }).then(function(response3){
-      console.log(response3)
+      var fivetemp = document.querySelectorAll("#fivetemp")
+      var fiveicon = document.querySelectorAll(".icon")
+      var fivehumid = document.querySelectorAll("#fivehumid")
+      var j = 7
+      for(i = 0; i < 5; i++){
+        var oneDayQuery = response3.list[j]
+        console.log(oneDayQuery)
+        var img = document.createElement("img")
+        img.src = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+        fiveicon[i].appendChild(img)
+        var innertemp = "Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F"
+        fivetemp[i].innerHTML = innertemp
+        var innerhumid = "Humidity: "+oneDayQuery.main.humidity+"%"
+        fivehumid[i].innerHTML= innerhumid
+        j = j + 8
+      }
+      //below is jquery where I went and typed out each line for each day, condensed it into 13 lines of code above
       //tomorrow's data
-      var oneDayQuery = response3.list[7]
-      var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
-      image = $("<img>").attr("src", imageURL)
-      $("#onedayicon").append(image)
-      $(".onedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
-      $(".onedayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
-      $("#onedayicon").attr("src", weatherURL)
-      //2nd day data
-      var oneDayQuery = response3.list[15]
-      var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
-      image = $("<img>").attr("src", imageURL)
-      $("#twodayicon").append(image)
-      $(".twodaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
-      $(".twodayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
-      $("#twodayicon").attr("src", weatherURL)
-      //3rd day data
-      var oneDayQuery = response3.list[23]
-      var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
-      image = $("<img>").attr("src", imageURL)
-      $("#threedayicon").append(image)
-      $(".threedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
-      $(".threedayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
-      $("#threedayicon").attr("src", weatherURL)
-      //4th day data
-      var oneDayQuery = response3.list[31]
-      var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
-      image = $("<img>").attr("src", imageURL)
-      $("#fourdayicon").append(image)
-      $(".fourdaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
-      $(".fourdayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
-      $("#fourdayicon").attr("src", weatherURL)
-      //5th day data
-      var oneDayQuery = response3.list[39]
-      var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
-      image = $("<img>").attr("src", imageURL)
-      $("#fivedayicon").append(image)
-      $(".fivedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
-      $(".fivedayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
-      $("#fivedayicon").attr("src", weatherURL)
+    //   var oneDayQuery = response3.list[7]
+    //   var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+    //   image = $("<img>").attr("src", imageURL)
+    //   $("#onedayicon").append(image)
+    //   $(".onedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
+    //   $(".onedayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
+    //   $("#onedayicon").attr("src", weatherURL)
+    //   //2nd day data
+    //   var oneDayQuery = response3.list[15]
+    //   var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+    //   image = $("<img>").attr("src", imageURL)
+    //   $("#twodayicon").append(image)
+    //   $(".twodaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
+    //   $(".twodayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
+    //   $("#twodayicon").attr("src", weatherURL)
+    //   //3rd day data
+    //   var oneDayQuery = response3.list[23]
+    //   var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+    //   image = $("<img>").attr("src", imageURL)
+    //   $("#threedayicon").append(image)
+    //   $(".threedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
+    //   $(".threedayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
+    //   $("#threedayicon").attr("src", weatherURL)
+    //   //4th day data
+    //   var oneDayQuery = response3.list[31]
+    //   var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+    //   image = $("<img>").attr("src", imageURL)
+    //   $("#fourdayicon").append(image)
+    //   $(".fourdaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
+    //   $(".fourdayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
+    //   $("#fourdayicon").attr("src", weatherURL)
+    //   //5th day data
+    //   var oneDayQuery = response3.list[39]
+    //   var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+    //   image = $("<img>").attr("src", imageURL)
+    //   $("#fivedayicon").append(image)
+    //   $(".fivedaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
+    //   $(".fivedayhumid").text("Humidity: "+oneDayQuery.main.humidity+"%")
+    //   $("#fivedayicon").attr("src", weatherURL)
     })
   }
 
