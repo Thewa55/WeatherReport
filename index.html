@@ -31,11 +31,12 @@
       </div>
       <div class="col-9 justify-content-center">
         <div id="today">
-          <h2>City</h2>
-          <div id="todayStats">Temperature</div>
-          <div id="todayStats">Humidity</div>
-          <div id="todayStats">Windspeed</div>
-          <div id="todayStats">UV Index</div>
+          <h2 id="cityName">City Name
+          </h2>
+          <h6 class="todayStats" id="todayTemp">Temperature:</h6>
+          <h6 class="todayStats" id="todayHumid">Humidity:</h6>
+          <h6 class="todayStats" id="todayWind">Wind Speed:</h6>
+          <h6 class="todayStats" id="todayUV">UV Index: <span class="badge badge-secondary" id="UVrating"></span></h6>
         </div>
         <div id="forcasttext">
           <h2>5-Day Forcast:</h2>
@@ -82,6 +83,8 @@
   var fiveDay = moment().add(5, 'day').format('L');
   var searchedCity = []
   var citySearch = ""
+  var lon = ""
+  var lat = ""
   $("#onedaylater").text(oneDay)
   $("#twodaylater").text(twoDay)
   $("#threedaylater").text(threeDay)
@@ -94,17 +97,75 @@
     citySearch = $(".form-control").val();
     searchedCity.push(citySearch)
     console.log(searchedCity)
+    localStorage.setItem("Cities",searchedCity)
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+citySearch+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response){
+      $("#cityName").text(response.name)
+      weatherURL = "http://openweathermap.org/img/w/"+response.weather[0].icon+".png"
+      var image = $("<img>").attr("src", weatherURL)
+      $("#cityName").append(image)
+      $("#todayTemp").text("Temperature: " + ((parseInt(response.main.temp)-273.15)*1.8+32).toFixed(0) + "°F/ " + (parseInt(response.main.temp)-273.15).toFixed(1) + "°C")
+      $("#todayHumid").text("Humidity: " + (response.main.humidity))
+      $("#todayWind").text("Windspeed: " + (response.wind.speed))
+      lon = response.coord.lon;
+      lat = response.coord.lat;
+      getUV(lon,lat);
+      five(lon,lat);
+    })
   }
-    // $(".formcontrol").val()
-    // var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+ $(".formcontrol").val()  +"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
-    // console.log(queryURL)
-    // $.ajax({
-    //   url: queryURL,
-    //   method: "GET"
-    // }).then(function(response){
-    //     console.log(response)
-    // })
-  
+
+
+  function getUV(lon,lat){
+    let UVquery = "http://api.openweathermap.org/data/2.5/uvi?appid=bd4e60e82b50ca8a0a79d3108bb6b609&lat=" + lat + "&lon=" + lon
+    $.ajax({
+      url: UVquery,
+      method: "GET"
+    }).then(function(response2){
+      UVrating = response2.value
+      $("#UVrating").text(UVrating)
+      if(UVrating < 3){
+        $("#UVrating").css("background-color", "green")
+      }
+      else if(UVrating < 6){
+        $("#UVrating").css("background-color", "yellow")
+      }
+      else if(UVrating < 8){
+        $("#UVrating").css("background-color", "orange")
+      }
+      else if(UVrating < 11){
+        $("#UVrating").css("background-color", "red")
+      }
+      else{
+        $("#UVrating").css("background-color", "violet")
+      }
+    })
+  }
+
+//   function five(lon,lat){
+//     let fivedayQuery = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
+//     console.log(fivedayQuery)
+//     $.ajax({
+//       url: fivedayQuery,
+//       method: "GET",
+//     }).then(function(response3){
+//       console.log(response3)
+//       var futureTime = response3.list[39].dt
+//       console.log(futureTime)
+//       var sec = new Date(futureTime*1000)
+//       console.log("Array 39 time is" + sec)
+//       var timezone = response3.city.timezone
+//       console.log(timezone)
+//       toTimeZone(sec, timezone)
+//     })
+//   }
+
+  function toTimeZone(time, zone) {
+    var format = 'YYYY/MM/DD HH:mm:ss ZZ';
+    return moment(time, format).tz(zone).format(format);
+  }
 
   $(".btn").on("click",weatherSearch)
   
