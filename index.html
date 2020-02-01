@@ -212,7 +212,7 @@
       $("#onedayicon").attr("src", weatherURL)
       //2nd day data
       var oneDayQuery = response3.list[15]
-      var imageURL = "http://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
+      var imageURL = "https://openweathermap.org/img/w/"+oneDayQuery.weather[0].icon+".png"
       image = $("<img>").attr("src", imageURL)
       $("#twodayicon").append(image)
       $(".twodaytemp").text("Temp: "+((parseInt(oneDayQuery.main.temp)-273.15)*1.8+32).toFixed(1)+"°F")
