@@ -28,7 +28,7 @@
             <button class="btn btn-outline-success my-2 my-sm-0 fas fa-search" type="submit"></button>
         </form>
         <div id="homeBtn">
-            <!-- <button class="btn btn-secondary new">My location</button>  -->
+            <button class="btn btn-secondary new" id ="userlocation">My location</button> 
         </div>
         <div id="searches">
         </div>
@@ -145,6 +145,27 @@
         return
     }
     cityCheck(citySearch)
+  }
+  
+  function userLoc(lat, lon){
+    userURL = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
+    $.ajax({
+      url: userURL,
+      method: "GET"
+    }).then(function(response){
+      console.log(response)
+      $("#cityName").text(response.name+" "+today)
+      weatherURL = "https://openweathermap.org/img/w/"+response.weather[0].icon+".png"
+      var image = $("<img>").attr("src", weatherURL)
+      $("#cityName").append(image)
+      $("#todayTemp").text("Temperature: " + ((parseInt(response.main.temp)-273.15)*1.8+32).toFixed(0) + "°F/ " + (parseInt(response.main.temp)-273.15).toFixed(1) + "°C")
+      $("#todayHumid").text("Humidity: " + (response.main.humidity)+"%")
+      $("#todayWind").text("Windspeed: " + (parseInt(response.wind.speed)*2.27).toFixed(2)+" MPH")
+      lon = response.coord.lon;
+      lat = response.coord.lat;
+      getUV(lon,lat);
+      five(lon,lat);
+    })
   }
 
   //this checks to make sure tht the city you searched for isn't already saved
@@ -285,11 +306,19 @@
 
   initialize()
 
-  $(".btn").on("click",weatherSearch)
+  $(".fas").on("click",weatherSearch)
+  $("#userlocation").on("click",function() {
+    $(".icon").empty();
+    navigator.geolocation.getCurrentPosition(function(position) {
+    let latUser = position.coords.latitude.toFixed(3);
+    let longUser = position.coords.longitude.toFixed(3);
+    userLoc(latUser, longUser)
+    });
+  });
   $(document).on("click", ".city",function(){
-      citySearch = $(this).attr("data-city")
+      citySearch = $(this).attr("data-city");
       $(".icon").empty();
-      getData(citySearch)
+      getData(citySearch);
   });
   </script>
 </body>
