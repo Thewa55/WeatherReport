@@ -32,10 +32,10 @@
     width: 100%;
 }
 #clearBtn{
-    margin-top: 10px;
+    margin-top: 1px;
 }
 #homeBtn{
-    margin-top: 2px;
+    margin-top: 10px;
 }
 #UVrating{
     color: black;

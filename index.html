@@ -27,13 +27,13 @@
             <input class="form-control" type="search" id="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0 fas fa-search" type="submit"></button>
         </form>
-        <div id="clearBtn">
-          <button class="btn btn-danger new" id ="clearAll">Clear All</button> 
-      </div>
         <div id="homeBtn">
             <button class="btn btn-secondary new" id ="userlocation">My location</button> 
         </div>
         <div id="searches">
+        </div>
+        <div id="clearBtn">
+          <button class="btn btn-danger new" id ="clearAll">Clear All</button> 
         </div>
       </div>
       <div class="col-9 justify-content-center">
@@ -183,10 +183,6 @@
     //this makes the first letter of every city neater
     //*note* this only works for a one word city, if it's two words or more I would have to split into an array and for loop it
     citySearch = citySearch.charAt(0).toUpperCase() + citySearch.toLowerCase().slice(1)
-    searchedCity.push(citySearch);
-    console.log(searchedCity);
-    cityButtons();
-    localStorage.setItem("city",JSON.stringify(searchedCity))
     getData(citySearch)
   }
 
@@ -195,8 +191,14 @@
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+citySearch+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
     $.ajax({
       url: queryURL,
-      method: "GET"
+      method: "GET",
+      statusCode: {404: function(){
+        alert("city doesn't exist")
+      }}
     }).then(function(response){
+      searchedCity.push(citySearch);
+      cityButtons();
+      localStorage.setItem("city",JSON.stringify(searchedCity))
       $("#cityName").text(response.name+" "+today)
       console.log(response)
       weatherURL = "https://openweathermap.org/img/w/"+response.weather[0].icon+".png"
