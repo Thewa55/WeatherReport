@@ -45,7 +45,7 @@
         <div id="forcasttext">
           <h2>5-Day Forcast:</h2>
         </div>
-        <div class="container justify-content-center">
+        <div class="container justify-content-center" style="color: white">
           <div class="card col-auto" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="onedaylater"></h5>
@@ -54,7 +54,6 @@
               <p class="card-text onedayhumid" id="fivehumid"></p>
             </div>
           </div>
-        </div>
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="twodaylater"></h5> 
@@ -70,7 +69,7 @@
               <p class="card-text threedaytemp" id="fivetemp"></p>
               <p class="card-text threedayhumid" id="fivehumid"></p> 
             </div>
-        </div>
+          </div>
           <div class="card col-auto ml-4" style="width: 8.5rem;">
             <div class="card-body">
               <h5 id="fourdaylater"></h5>
@@ -157,6 +156,8 @@
         return
       }
     }
+    citySearch.toLowerCase()
+    citySearch = citySearch.charAt(0).toUpperCase() + citySearch.toLowerCase().slice(1)
     searchedCity.push(citySearch);
     console.log(searchedCity);
     cityButtons();
@@ -172,6 +173,7 @@
       method: "GET"
     }).then(function(response){
       $("#cityName").text(response.name+" "+today)
+      console.log(response)
       weatherURL = "https://openweathermap.org/img/w/"+response.weather[0].icon+".png"
       var image = $("<img>").attr("src", weatherURL)
       $("#cityName").append(image)
