@@ -145,13 +145,26 @@
     if(citySearch == ""){
         return
     }
-    searchedCity.push(citySearch)
-    console.log(searchedCity)
-    cityButtons()
+    cityCheck(citySearch)
+  }
+
+  //this checks to make sure tht the city you searched for isn't already saved
+  function cityCheck(citySearch){
+    for(i= 0; i < searchedCity.length; i++){
+      if(searchedCity[i].toLowerCase() ===citySearch.toLowerCase()){
+        console.log(i)
+        alert("The city is already saved below")
+        return
+      }
+    }
+    searchedCity.push(citySearch);
+    console.log(searchedCity);
+    cityButtons();
     localStorage.setItem("city",JSON.stringify(searchedCity))
     getData(citySearch)
   }
 
+  //gets the temperature/humidity/windspeed
   function getData(citySearch){
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+citySearch+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
     $.ajax({
@@ -274,7 +287,6 @@
   $(document).on("click", ".city",function(){
       citySearch = $(this).attr("data-city")
       $(".icon").empty();
-      console.log(citySearch)
       getData(citySearch)
   });
   </script>
