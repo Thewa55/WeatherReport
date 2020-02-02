@@ -31,8 +31,11 @@
     margin-top: 2px;
     width: 100%;
 }
-#homeBtn{
+#clearBtn{
     margin-top: 10px;
+}
+#homeBtn{
+    margin-top: 2px;
 }
 #UVrating{
     color: black;

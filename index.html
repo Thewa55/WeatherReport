@@ -27,6 +27,9 @@
             <input class="form-control" type="search" id="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0 fas fa-search" type="submit"></button>
         </form>
+        <div id="clearBtn">
+          <button class="btn btn-danger new" id ="clearAll">Clear All</button> 
+      </div>
         <div id="homeBtn">
             <button class="btn btn-secondary new" id ="userlocation">My location</button> 
         </div>
@@ -177,7 +180,8 @@
         return
       }
     }
-    citySearch.toLowerCase()
+    //this makes the first letter of every city neater
+    //*note* this only works for a one word city, if it's two words or more I would have to split into an array and for loop it
     citySearch = citySearch.charAt(0).toUpperCase() + citySearch.toLowerCase().slice(1)
     searchedCity.push(citySearch);
     console.log(searchedCity);
@@ -320,6 +324,11 @@
       $(".icon").empty();
       getData(citySearch);
   });
+  $(".btn-danger").on("click", function(){
+    localStorage.clear("city");
+    $("#searches").empty()
+    searchedCity.splice(0, searchedCity.length)
+  })
   </script>
 </body>
 </html>
