@@ -183,6 +183,9 @@
     //this makes the first letter of every city neater
     //*note* this only works for a one word city, if it's two words or more I would have to split into an array and for loop it
     citySearch = citySearch.charAt(0).toUpperCase() + citySearch.toLowerCase().slice(1)
+    searchedCity.push(citySearch);
+    cityButtons();
+    localStorage.setItem("city",JSON.stringify(searchedCity))
     getData(citySearch)
   }
 
@@ -196,9 +199,6 @@
         alert("city doesn't exist")
       }}
     }).then(function(response){
-      searchedCity.push(citySearch);
-      cityButtons();
-      localStorage.setItem("city",JSON.stringify(searchedCity))
       $("#cityName").text(response.name+" "+today)
       console.log(response)
       weatherURL = "https://openweathermap.org/img/w/"+response.weather[0].icon+".png"
