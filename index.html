@@ -110,7 +110,6 @@
   var citySearch = "";
   var lon = "";
   var lat = "";
-  var status = ""
   var errorEl = document.querySelector("#errors")
 
   //applying the time to elements
@@ -196,7 +195,6 @@
 
   //gets the temperature/humidity/windspeed
   function getData(citySearch){
-    
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+citySearch+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
     $.ajax({
       url: queryURL,
@@ -225,6 +223,9 @@
     })
   }
 
+  //I couldn't think of a solution to make it so recallData and getData can be the same function
+  //city buttons would recreate themself if I had it inside ajax call
+  //if I had it outside ajax it would create a button for any random letters I typed since 404 is not detected until ajax
   function recallData(citySearch){
     console.log(status)
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+citySearch+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
