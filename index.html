@@ -27,6 +27,7 @@
             <input class="form-control" type="search" id="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0 fas fa-search" type="submit"></button>
         </form>
+        <div style="font-size: x-small; color: red" id="errors"></div>
         <div id="homeBtn">
             <button class="btn btn-secondary new" id ="userlocation">My location</button> 
         </div>
@@ -109,6 +110,8 @@
   var citySearch = "";
   var lon = "";
   var lat = "";
+  var status = ""
+  var errorEl = document.querySelector("#errors")
 
   //applying the time to elements
   $("#onedaylater").text(oneDay);
@@ -129,7 +132,7 @@
   }
 
   //this function creates buttons based off user clicks or local storage
-  function cityButtons(){
+  function cityButtons(){ 
     $("#searches").empty()
     for(i = 0; i < searchedCity.length; i++){
       var cityBtn = $("<button>").text(searchedCity[i])
@@ -175,32 +178,65 @@
   function cityCheck(citySearch){
     for(i= 0; i < searchedCity.length; i++){
       if(searchedCity[i].toLowerCase() ===citySearch.toLowerCase()){
-        console.log(i)
-        alert("The city is already saved below")
+        errorEl.textContent = "The city is already saved below"
+        setTimeout(function(){ errorEl.textContent = ""; }, 2000)
         return
       }
+    }
+    if (parseInt(citySearch) > 0){
+      errorEl.textContent = "No numbers please"
+      setTimeout(function(){ errorEl.textContent = ""; }, 2000)
+      return;
     }
     //this makes the first letter of every city neater
     //*note* this only works for a one word city, if it's two words or more I would have to split into an array and for loop it
     citySearch = citySearch.charAt(0).toUpperCase() + citySearch.toLowerCase().slice(1)
-    searchedCity.push(citySearch);
-    cityButtons();
-    localStorage.setItem("city",JSON.stringify(searchedCity))
     getData(citySearch)
   }
 
   //gets the temperature/humidity/windspeed
   function getData(citySearch){
+    
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+citySearch+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
     $.ajax({
       url: queryURL,
       method: "GET",
       statusCode: {404: function(){
-        alert("city doesn't exist")
+        errorEl.textContent = "City does not exist"
+        setTimeout(function(){ errorEl.textContent = ""; }, 2000)
+        return
+      }}
+    }).then(function(response){
+      searchedCity.push(citySearch);
+      cityButtons();
+      localStorage.setItem("city",JSON.stringify(searchedCity))
+      console.log(response)
+      $("#cityName").text(response.name+" "+today)
+      weatherURL = "https://openweathermap.org/img/w/"+response.weather[0].icon+".png"
+      var image = $("<img>").attr("src", weatherURL)
+      $("#cityName").append(image)
+      $("#todayTemp").text("Temperature: " + ((parseInt(response.main.temp)-273.15)*1.8+32).toFixed(0) + "°F/ " + (parseInt(response.main.temp)-273.15).toFixed(1) + "°C")
+      $("#todayHumid").text("Humidity: " + (response.main.humidity)+"%")
+      $("#todayWind").text("Windspeed: " + (parseInt(response.wind.speed)*2.27).toFixed(2)+" MPH")
+      lon = response.coord.lon;
+      lat = response.coord.lat;
+      getUV(lon,lat);
+      five(lon,lat);
+    })
+  }
+
+  function recallData(citySearch){
+    console.log(status)
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+citySearch+"&appid=bd4e60e82b50ca8a0a79d3108bb6b609"
+    $.ajax({
+      url: queryURL,
+      method: "GET",
+      statusCode: {404: function(){
+        alert("Doesn't exist")
+        return
       }}
     }).then(function(response){
       $("#cityName").text(response.name+" "+today)
-      console.log(response)
       weatherURL = "https://openweathermap.org/img/w/"+response.weather[0].icon+".png"
       var image = $("<img>").attr("src", weatherURL)
       $("#cityName").append(image)
@@ -324,7 +360,7 @@
   $(document).on("click", ".city",function(){
       citySearch = $(this).attr("data-city");
       $(".icon").empty();
-      getData(citySearch);
+      recallData(citySearch);
   });
   $(".btn-danger").on("click", function(){
     localStorage.clear("city");
